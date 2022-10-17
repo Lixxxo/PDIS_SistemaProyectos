@@ -1,0 +1,7 @@
+Database/credentials.json
+bin
+.vs
+.idea
+obj
+Migrations
+*.csproj
