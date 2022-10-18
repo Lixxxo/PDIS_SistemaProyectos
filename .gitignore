@@ -2,4 +2,5 @@ Database/*.json
 .vs
 .idea
 obj
+bin
 Migrations/*.cs
