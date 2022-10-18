@@ -1,5 +1,5 @@
-Database/credentials.json
+Database/*.json
 .vs
 .idea
 obj
-Migrations
+Migrations/*.cs
