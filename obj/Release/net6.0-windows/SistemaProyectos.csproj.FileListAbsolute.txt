@@ -1,5 +1,0 @@
-C:\Users\Vicen\Desktop\Proyectos\pdis\Trabajo 2\SistemaProyectos\obj\Release\net6.0-windows\SistemaProyectos.csproj.AssemblyReference.cache
-C:\Users\Vicen\Desktop\Proyectos\pdis\Trabajo 2\SistemaProyectos\obj\Release\net6.0-windows\MainWindow.g.cs
-C:\Users\Vicen\Desktop\Proyectos\pdis\Trabajo 2\SistemaProyectos\obj\Release\net6.0-windows\App.g.cs
-C:\Users\Vicen\Desktop\Proyectos\pdis\Trabajo 2\SistemaProyectos\obj\Release\net6.0-windows\SistemaProyectos_MarkupCompile.cache
-C:\Users\Vicen\Desktop\Proyectos\pdis\Trabajo 2\SistemaProyectos\obj\Release\net6.0-windows\SistemaProyectos_MarkupCompile.lref
