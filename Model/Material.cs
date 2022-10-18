@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
+
 namespace SistemaProyectos.Model
 {
     [Table("Materials")]
@@ -15,14 +16,12 @@ namespace SistemaProyectos.Model
         public string Name { get; set; }
         [Column("Price")]
         public int Price { get; set; }
-        [Column("Quantity")]
-        public int Quantity { get; set; }
         
         public Material()
         {
-            Quantity = 0;
         }
 
         public ICollection<JobMaterial> JobMaterials { get; set; }
+        
     }
 }

@@ -2,12 +2,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
+
 namespace SistemaProyectos.Model
 {
     [Table("Jobs")]
     public class Job
     {
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
