@@ -15,19 +15,33 @@ namespace SistemaProyectos.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionBuilder)
         {
-            string fileName = "C:\\Users\\Vicen\\Desktop\\Proyectos\\pdis\\Trabajo 2\\SistemaProyectos\\Database\\credentials.json";
+            string fileName = "C:\\Users\\Vicen\\Desktop\\Proyectos\\pdis\\Trabajo 2\\SistemaProyectos\\Database\\localdb.json";
             string jsonString = System.IO.File.ReadAllText(fileName);
 
             MSSQLConection connection = JsonSerializer.Deserialize<List<MSSQLConection>>(jsonString)[0];
             // Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;
             ;
             var connectionString = new StringBuilder();
-            connectionString.AppendFormat(
-                "Server={0};Database={1};User Id={2};Password={3};",
-                connection.host,
-                connection.dbName,
-                connection.user,
-                connection.pass);
+
+            if (connection.pass != "")
+            {
+                //Server=myServer;Database=myDatabase;Uid=myUser;Pwd=myPassword;
+                connectionString.AppendFormat(
+                    "Server={0};Database={1};User Id={2};Password={3};",
+                    connection.host,
+                    connection.dbName,
+                    connection.user,
+                    connection.pass);                
+            }
+            else
+            {
+                //Server=localhost\SQLEXPRESS;Database=master;TrustedConnection=True;
+                connectionString.AppendFormat(
+                    "Server={0};Database={1};TrustedConnection=True;",
+                    connection.host,
+                    connection.dbName);
+            }
+
 
             if (!optionBuilder.IsConfigured)
             {
