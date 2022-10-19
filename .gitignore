@@ -3,4 +3,4 @@ Database/*.json
 .idea
 obj
 bin
-Migrations/*.cs
+# Migrations/*.cs
