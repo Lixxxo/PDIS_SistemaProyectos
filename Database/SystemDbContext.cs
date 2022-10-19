@@ -15,7 +15,7 @@ namespace SistemaProyectos.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionBuilder)
         {
-            string fileName = "C:\\Users\\Vicen\\Desktop\\Proyectos\\pdis\\Trabajo 2\\SistemaProyectos\\Database\\localdb.json";
+            string fileName = "C:\\Users\\Vicen\\Desktop\\Proyectos\\pdis\\Trabajo 2\\SistemaProyectos\\Database\\credentials.json";
             string jsonString = System.IO.File.ReadAllText(fileName);
 
             MSSQLConection connection = JsonSerializer.Deserialize<List<MSSQLConection>>(jsonString)[0];
@@ -55,6 +55,7 @@ namespace SistemaProyectos.Database
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
         public virtual DbSet<JobMaterial> JobMaterials { get; set; }
+        public virtual DbSet<Movement> Movements { get; set; }
         
     }
 
