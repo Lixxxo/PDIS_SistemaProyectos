@@ -15,7 +15,7 @@ namespace SistemaProyectos.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionBuilder)
         {
-            string fileName = "C:\\Users\\Vicen\\Desktop\\Proyectos\\pdis\\Trabajo 2\\SistemaProyectos\\Database\\credentials.json";
+            string fileName = "C:\\Users\\Joel\\Desktop\\acm1pt\\PDIS_SistemaProyectos\\Database\\credentials.json";
             string jsonString = System.IO.File.ReadAllText(fileName);
 
             MSSQLConection connection = JsonSerializer.Deserialize<List<MSSQLConection>>(jsonString)[0];
@@ -35,9 +35,9 @@ namespace SistemaProyectos.Database
             }
             else
             {
-                //Server=localhost\SQLEXPRESS;Database=master;TrustedConnection=True;
+                //Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;
                 connectionString.AppendFormat(
-                    "Server={0};Database={1};TrustedConnection=True;",
+                    "Server={0};Database={1};Trusted_Connection=True;",
                     connection.host,
                     connection.dbName);
             }
