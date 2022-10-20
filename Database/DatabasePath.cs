@@ -1,5 +1,8 @@
 namespace SistemaProyectos.Database;
 
+/// <summary>
+/// Class that contains the path to the amazon database.
+/// </summary>
 public class DatabasePath
 {
     public const string databasePath = "Server=LIXOACER\\SQLEXPRESS;Database=pdis;Trusted_Connection=True;";
