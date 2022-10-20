@@ -9,9 +9,9 @@
     xmlns:System="clr-namespace:System;assembly=System.Runtime">
     <Window.Resources>
         <System:String x:Key="lblProject">Proyectos</System:String>
-        <System:String x:Key="lblJob">Tareas</System:String>
+        <System:String x:Key="lblTask">Tareas</System:String>
         <System:String x:Key="btnCreateProject">Crear Proyecto</System:String>
-        <System:String x:Key="btnCreateJob">Crear Tarea</System:String>
+        <System:String x:Key="btnCreateTask">Crear Tarea</System:String>
         <System:String x:Key="btnAsignMaterial">Asignar Material</System:String>
     </Window.Resources>
     <Grid Margin="10">
@@ -35,12 +35,12 @@
 
         </StackPanel>
 
-        <StackPanel x:Name="stackJobs" VerticalAlignment="Center">
+        <StackPanel x:Name="stackTasks" VerticalAlignment="Center">
 
-            <Label x:Name="lblJobs" FontFamily="Consolas" FontSize="36"
-                   Content="{DynamicResource lblJob}">
+            <Label x:Name="lblTasks" FontFamily="Consolas" FontSize="36"
+                   Content="{DynamicResource lblTask}">
             </Label>
-            <DataGrid x:Name="dgJobs" >
+            <DataGrid x:Name="dgTasks" >
             </DataGrid>
 
         </StackPanel>
@@ -52,8 +52,8 @@
                     Height="90" FontFamily="Consolas" FontSize="24" Click="btnCreateProject_Click">
                 
             </Button>
-            <Button x:Name="btnCreateJob"
-                    Content="{DynamicResource btnCreateJob}" 
+            <Button x:Name="btnCreateTask"
+                    Content="{DynamicResource btnCreateTask}" 
                     Margin="10,10,10,10"
                     Height="90" FontFamily="Consolas" FontSize="24">
 

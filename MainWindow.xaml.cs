@@ -18,14 +18,14 @@ namespace SistemaProyectos
     public partial class MainWindow : Window
     {
 
-        List<Project>? Project_List { get; set; }
-        List<Job>? Job_List { get; set; }
+        List<Project>? ProjectList { get; set; }
+        List<Task>? TaskList { get; set; }
         
         public MainWindow()
         {
             InitializeComponent();
 
-            btnCreateJob.IsEnabled = false;
+            btnCreateTask.IsEnabled = false;
             btnAsignMaterial.IsEnabled = false;
             PopulateView();
         }
@@ -38,6 +38,7 @@ namespace SistemaProyectos
                 context.Projects.Add(p);
                 context.SaveChanges();
             }
+            
             PopulateView();
 
 
@@ -46,11 +47,11 @@ namespace SistemaProyectos
         private void PopulateView()
         {
             dgProjects.Columns.Clear();
-            dgJobs.Columns.Clear();
+            dgTasks.Columns.Clear();
             using (var context = new SystemDbContext())
             {
-                Project_List = context.Projects.ToList<Project>();
-                Job_List = context.Jobs.ToList<Job>();
+                ProjectList = context.Projects.ToList<Project>();
+                TaskList = context.Tasks.ToList<Task>();
 
             }
             DataTable dtProject = new DataTable();
@@ -58,25 +59,25 @@ namespace SistemaProyectos
             dtProject.Columns.Add("Nombre");
             dtProject.Columns.Add("Estado");
 
-            DataTable dtJob = new DataTable();
-            dtJob.Columns.Add("Id");
-            dtJob.Columns.Add("Nombre");
-            dtJob.Columns.Add("Estado");
-            dtJob.Columns.Add("Progreso");
+            DataTable dtTask = new DataTable();
+            dtTask.Columns.Add("Id");
+            dtTask.Columns.Add("Nombre");
+            dtTask.Columns.Add("Estado");
+            dtTask.Columns.Add("Progreso");
 
-            foreach (var project in Project_List)
+            foreach (var project in ProjectList)
             {
 
                 dtProject.Rows.Add(project.Id, project.Name, project.State);
 
             }
-            foreach (var job in Job_List)
+            foreach (var Task in TaskList)
             {
-                dtProject.Rows.Add(job.Id, job.Name, job.State, job.Progress);
+                dtProject.Rows.Add(Task.Id, Task.Name, Task.State, Task.Progress);
             }
 
             dgProjects.ItemsSource = dtProject.DefaultView;
-            dgJobs.ItemsSource = dtJob.DefaultView;
+            dgTasks.ItemsSource = dtTask.DefaultView;
         }
     }
     

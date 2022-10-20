@@ -23,7 +23,7 @@ namespace SistemaProyectos.Model
             this.Name = "Proyecto Nuevo";
         }
         
-        public ICollection<Job> Jobs { get; set; }
+        public ICollection<Task> Tasks { get; set; }
 
     }
 }

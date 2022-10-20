@@ -5,8 +5,8 @@ using System;
 
 namespace SistemaProyectos.Model
 {
-    [Table("JobMaterials")]
-    public class JobMaterial
+    [Table("TaskMaterials")]
+    public class TaskMaterial
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -16,7 +16,7 @@ namespace SistemaProyectos.Model
         [Column("Quantity", TypeName = "int")]
         public int Quantity { get; set; }
 
-        public JobMaterial()
+        public TaskMaterial()
         {
             Hour = DateTime.Now;
             Quantity = 0;

@@ -21,7 +21,7 @@ namespace SistemaProyectos.Model
         {
         }
 
-        public ICollection<JobMaterial> JobMaterials { get; set; }
+        public ICollection<TaskMaterial> TaskMaterials { get; set; }
         
     }
 }

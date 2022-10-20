@@ -11,9 +11,9 @@ namespace SistemaProyectos.ProjectsSystemCore;
 public class ProjectsSystem : IProjectsSystem
 {
     /// <summary>
-    /// List of jobs.
+    /// List of Tasks.
     /// </summary>
-    private List<Job> _jobs;
+    private List<Task> _Tasks;
 
     /// <summary>
     /// List of projects.
@@ -25,7 +25,7 @@ public class ProjectsSystem : IProjectsSystem
     /// </summary>
     public ProjectsSystem()
     {
-        _jobs = new List<Job>();
+        _Tasks = new List<Task>();
         _projects = new List<Project>();
     }
 
@@ -34,17 +34,17 @@ public class ProjectsSystem : IProjectsSystem
         throw new NotImplementedException();
     }
 
-    public bool CreateJob(Job job)
+    public bool CreateTask(Task Task)
     {
         throw new NotImplementedException();
     }
 
-    public bool ModifyJob(int jobId, Job updatedJob)
+    public bool ModifyTask(int TaskId, Task updatedTask)
     {
         throw new NotImplementedException();
     }
 
-    public bool AssignMaterial(Material material, JobMaterial jobMaterial)
+    public bool AssignMaterial(Material material, TaskMaterial TaskMaterial)
     {
         throw new NotImplementedException();
     }

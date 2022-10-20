@@ -5,8 +5,8 @@ using System.Collections.Generic;
 
 namespace SistemaProyectos.Model
 {
-    [Table("Jobs")]
-    public class Job
+    [Table("Tasks")]
+    public class Task
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -20,13 +20,13 @@ namespace SistemaProyectos.Model
         [Column("Progress", TypeName = "float")]
         public float Progress { get; set; }
 
-        public Job()
+        public Task()
         {
             State = "Inactive";
             Progress = 0.0f;
         }
 
-        public ICollection<JobMaterial> JobMaterials { get; set; }
+        public ICollection<TaskMaterial> TaskMaterials { get; set; }
 
     }
 }

@@ -15,8 +15,8 @@ namespace SistemaProyectos.Database
         }
         public virtual DbSet<Material> Materials { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
-        public virtual DbSet<Job> Jobs { get; set; }
-        public virtual DbSet<JobMaterial> JobMaterials { get; set; }
-        public virtual DbSet<Movement> Movements { get; set; }
+        public virtual DbSet<Task> Tasks { get; set; }
+        public virtual DbSet<TaskMaterial> TaskMaterials { get; set; }
+        
     }
 }
