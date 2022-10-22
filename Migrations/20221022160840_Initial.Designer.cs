@@ -12,8 +12,8 @@ using SistemaProyectos.Database;
 namespace SistemaProyectos.Migrations
 {
     [DbContext(typeof(SystemDbContext))]
-    [Migration("20221020121831_001")]
-    partial class _001
+    [Migration("20221022160840_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,6 +41,10 @@ namespace SistemaProyectos.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int")
                         .HasColumnName("Price");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int")
+                        .HasColumnName("Quantity");
 
                     b.HasKey("Id");
 

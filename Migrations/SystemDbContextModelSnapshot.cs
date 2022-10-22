@@ -40,6 +40,10 @@ namespace SistemaProyectos.Migrations
                         .HasColumnType("int")
                         .HasColumnName("Price");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int")
+                        .HasColumnName("Quantity");
+
                     b.HasKey("Id");
 
                     b.ToTable("Materials");

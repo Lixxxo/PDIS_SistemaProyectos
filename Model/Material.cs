@@ -16,6 +16,9 @@ namespace SistemaProyectos.Model
         public string Name { get; set; }
         [Column("Price")]
         public int Price { get; set; }
+        [Column("Quantity")]
+        public int Quantity { get; set; }
+
         
         public Material()
         {
