@@ -12,7 +12,7 @@ public class SystemDbContext : DbContext
     {
         if (!optionBuilder.IsConfigured)
         {
-            optionBuilder.UseSqlServer(DatabasePath.databasePath, 
+            optionBuilder.UseSqlServer(Connection.ConnectionString, 
                 option => {});
         }
     }
