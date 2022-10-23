@@ -18,8 +18,8 @@ namespace SistemaProyectos.Model
 
         public TaskMaterial()
         {
-            Hour = DateTime.Now;
-            Quantity = 0;
+            this.Hour = DateTime.Now;
+            this.Quantity = 0;
         }
 
     }

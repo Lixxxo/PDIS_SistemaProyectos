@@ -19,8 +19,9 @@ namespace SistemaProyectos.Model
 
         public Project()
         {
-            this.State = "Inactive";
-            this.Name = "Proyecto Nuevo";
+            this.Name = "Nuevo Proyecto";
+            this.State = "Inactivo";
+            this.Tasks = new List<Task>();
         }
         
         public ICollection<Task> Tasks { get; set; }
