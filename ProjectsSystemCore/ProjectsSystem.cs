@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using SistemaProyectos.Model;
+using SistemaProyectos.Database;
 using NotImplementedException = System.NotImplementedException;
 
 namespace SistemaProyectos.ProjectsSystemCore;
@@ -13,7 +16,7 @@ public class ProjectsSystem : IProjectsSystem
     /// <summary>
     /// List of Tasks.
     /// </summary>
-    private List<Task> _Tasks;
+    private List<Task> _tasks;
 
     /// <summary>
     /// List of projects.
@@ -25,26 +28,75 @@ public class ProjectsSystem : IProjectsSystem
     /// </summary>
     public ProjectsSystem()
     {
-        _Tasks = new List<Task>();
+        _tasks = new List<Task>();
         _projects = new List<Project>();
     }
 
     public bool CreateProject(Project project)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using (var context = new SystemDbContext())
+            {
+                context.Projects.Add(project);
+                context.SaveChanges();
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return false;
+        }
+
+        return true;
+
     }
 
-    public bool CreateTask(Task Task)
+    public bool CreateTask(Task task)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using (var context = new SystemDbContext())
+            {
+                context.Tasks.Add(task);
+                context.SaveChanges();
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return false;
+        }
+
+        return true;
     }
 
-    public bool ModifyTask(int TaskId, Task updatedTask)
+    public bool ModifyTask(int taskId, Task updatedTask)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using (var context = new SystemDbContext())
+            {
+                Task result = context.Tasks.First(t => t.Id == taskId);
+
+                result.Name = updatedTask.Name;
+                result.Progress = updatedTask.Progress;
+                result.State = updatedTask.State;
+                
+                context.Entry(result).State = EntityState.Modified;
+                context.SaveChanges();
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return false;
+        }
+
+        return true;
     }
 
-    public bool AssignMaterial(Material material, TaskMaterial TaskMaterial)
+    public bool AssignMaterial(Material material, TaskMaterial taskMaterial)
     {
         throw new NotImplementedException();
     }

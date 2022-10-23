@@ -20,17 +20,18 @@ namespace SistemaProyectos
 
         List<Project>? ProjectList { get; set; }
         List<Task>? TaskList { get; set; }
+
+        Project SelectedProject { get; set; }
         
         public MainWindow()
         {
             InitializeComponent();
-
-            btnCreateTask.IsEnabled = false;
-            btnAsignMaterial.IsEnabled = false;
+            SelectedProject = new Project();
+            SelectedProject!.Id = 1;
             PopulateView();
         }
 
-        private void btnCreateProject_Click(object sender, RoutedEventArgs e)
+        private void BtnCreateProject_Click(object sender, RoutedEventArgs e)
         {
             using (var context = new SystemDbContext())
             {
@@ -38,22 +39,33 @@ namespace SistemaProyectos
                 context.Projects.Add(p);
                 context.SaveChanges();
             }
-            
             PopulateView();
-
-
+        }
+        private void BtnCreateTask_Click(object sender, RoutedEventArgs e)
+        {
+            // throw new NotImplementedException();
         }
 
         private void PopulateView()
         {
-            dgProjects.Columns.Clear();
-            dgTasks.Columns.Clear();
             using (var context = new SystemDbContext())
             {
                 ProjectList = context.Projects.ToList<Project>();
-                TaskList = context.Tasks.ToList<Task>();
+
+                if (ProjectList.Count != 0)
+                {
+                    int selectedId = this.SelectedProject.Id;
+                    var resultsProjectTask = context.Tasks
+                                                                .Where(t => t.Id == selectedId)
+                                                                .ToList();
+                    TaskList = context.Tasks.ToList<Task>();
+                }
+
 
             }
+            DgProjects.Columns.Clear();
+            DgTasks.Columns.Clear();
+
             DataTable dtProject = new DataTable();
             dtProject.Columns.Add("Id");
             dtProject.Columns.Add("Nombre");
@@ -67,18 +79,18 @@ namespace SistemaProyectos
 
             foreach (var project in ProjectList)
             {
-
                 dtProject.Rows.Add(project.Id, project.Name, project.State);
-
             }
-            foreach (var Task in TaskList)
+            foreach (var task in TaskList!)
             {
-                dtProject.Rows.Add(Task.Id, Task.Name, Task.State, Task.Progress);
+                dtProject.Rows.Add(task.Id, task.Name, task.State, task.Progress);
             }
 
-            dgProjects.ItemsSource = dtProject.DefaultView;
-            dgTasks.ItemsSource = dtTask.DefaultView;
+            DgProjects.ItemsSource = dtProject.DefaultView;
+            DgTasks.ItemsSource = dtTask.DefaultView;
         }
+
+
     }
     
 }

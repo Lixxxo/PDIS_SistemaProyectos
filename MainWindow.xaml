@@ -12,17 +12,17 @@
         <System:String x:Key="lblTask">Tareas</System:String>
         <System:String x:Key="btnCreateProject">Crear Proyecto</System:String>
         <System:String x:Key="btnCreateTask">Crear Tarea</System:String>
-        <System:String x:Key="btnAsignMaterial">Asignar Material</System:String>
+        <System:String x:Key="btnAssignMaterial">Asignar Material</System:String>
     </Window.Resources>
     <Grid Margin="10">
         
-        <StackPanel x:Name="stackProjects" VerticalAlignment="Top">
+        <StackPanel x:Name="StackProjects" VerticalAlignment="Top">
 
-            <Label x:Name="lblProject" FontFamily="Consolas" FontSize="36"
+            <Label x:Name="LblProject" FontFamily="Consolas" FontSize="36"
                    Content="{DynamicResource lblProject}">
                 
             </Label>
-            <DataGrid x:Name="dgProjects"
+            <DataGrid x:Name="DgProjects"
                       >
                 <DataGrid.Columns>
 
@@ -35,31 +35,31 @@
 
         </StackPanel>
 
-        <StackPanel x:Name="stackTasks" VerticalAlignment="Center">
+        <StackPanel x:Name="StackTasks" VerticalAlignment="Center">
 
-            <Label x:Name="lblTasks" FontFamily="Consolas" FontSize="36"
+            <Label x:Name="LblTasks" FontFamily="Consolas" FontSize="36"
                    Content="{DynamicResource lblTask}">
             </Label>
-            <DataGrid x:Name="dgTasks" >
+            <DataGrid x:Name="DgTasks" >
             </DataGrid>
 
         </StackPanel>
 
-        <StackPanel x:Name="stackButtons" Margin="440,10,10,10">
-            <Button x:Name="btnCreateProject"
+        <StackPanel x:Name="StackButtons" Margin="440,10,10,10">
+            <Button x:Name="BtnCreateProject"
                     Content="{DynamicResource btnCreateProject}" 
                     Margin="10,10,10,10"
-                    Height="90" FontFamily="Consolas" FontSize="24" Click="btnCreateProject_Click">
+                    Height="90" FontFamily="Consolas" FontSize="24" Click="BtnCreateProject_Click">
                 
             </Button>
-            <Button x:Name="btnCreateTask"
+            <Button x:Name="BtnCreateTask"
                     Content="{DynamicResource btnCreateTask}" 
                     Margin="10,10,10,10"
-                    Height="90" FontFamily="Consolas" FontSize="24">
+                    Height="90" FontFamily="Consolas" FontSize="24" Click="BtnCreateTask_Click">
 
             </Button>
-            <Button x:Name="btnAsignMaterial"
-                    Content="{DynamicResource btnAsignMaterial}" 
+            <Button x:Name="BtnAssignMaterial"
+                    Content="{DynamicResource btnAssignMaterial}" 
                     Margin="10,70,10,10" 
                     Height="90" FontFamily="Consolas" FontSize="24">
 
