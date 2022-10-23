@@ -9,6 +9,7 @@ using System.Linq;
 using SistemaProyectos.Database;
 using SistemaProyectos.Model;
 using System.Data;
+using System.Data.Entity.Core.Objects;
 
 namespace SistemaProyectos
 {
@@ -17,25 +18,22 @@ namespace SistemaProyectos
     /// </summary>
     public partial class MainWindow : Window
     {
-
         List<Project>? ProjectList { get; set; }
         List<Task>? TaskList { get; set; }
-
         Project SelectedProject { get; set; }
         
         public MainWindow()
         {
             InitializeComponent();
-            SelectedProject = new Project();
-            SelectedProject!.Id = 1;
+
             PopulateView();
         }
 
         private void BtnCreateProject_Click(object sender, RoutedEventArgs e)
         {
+            var p = new Project();
             using (var context = new SystemDbContext())
             {
-                var p = new Project();
                 context.Projects.Add(p);
                 context.SaveChanges();
             }
@@ -43,53 +41,40 @@ namespace SistemaProyectos
         }
         private void BtnCreateTask_Click(object sender, RoutedEventArgs e)
         {
-            // throw new NotImplementedException();
+            var t = new Task
+            {
+                Project = SelectedProject
+            };
+            using (var context = new SystemDbContext())
+            {
+                context.Tasks.Add(t);
+                context.SaveChanges();
+            }
+            //
+
         }
 
         private void PopulateView()
         {
             using (var context = new SystemDbContext())
             {
-                ProjectList = context.Projects.ToList<Project>();
+                this.ProjectList = context.Projects.ToList<Project>();
 
                 if (ProjectList.Count != 0)
                 {
-                    int selectedId = this.SelectedProject.Id;
-                    var resultsProjectTask = context.Tasks
-                                                                .Where(t => t.Id == selectedId)
-                                                                .ToList();
-                    TaskList = context.Tasks.ToList<Task>();
+                    this.SelectedProject = ProjectList.First();
+                    this.TaskList = this.SelectedProject.Tasks.ToList<Task>();
                 }
 
 
             }
-            DgProjects.Columns.Clear();
-            DgTasks.Columns.Clear();
+            DgProjects.ItemsSource = null;
+            DgTasks.ItemsSource = null;
+            
+            DgProjects.ItemsSource = this.ProjectList.ToList();
+            DgTasks.ItemsSource = this.TaskList.ToList();
 
-            DataTable dtProject = new DataTable();
-            dtProject.Columns.Add("Id");
-            dtProject.Columns.Add("Nombre");
-            dtProject.Columns.Add("Estado");
-
-            DataTable dtTask = new DataTable();
-            dtTask.Columns.Add("Id");
-            dtTask.Columns.Add("Nombre");
-            dtTask.Columns.Add("Estado");
-            dtTask.Columns.Add("Progreso");
-
-            foreach (var project in ProjectList)
-            {
-                dtProject.Rows.Add(project.Id, project.Name, project.State);
-            }
-            foreach (var task in TaskList!)
-            {
-                dtProject.Rows.Add(task.Id, task.Name, task.State, task.Progress);
-            }
-
-            DgProjects.ItemsSource = dtProject.DefaultView;
-            DgTasks.ItemsSource = dtTask.DefaultView;
         }
-
 
     }
     
