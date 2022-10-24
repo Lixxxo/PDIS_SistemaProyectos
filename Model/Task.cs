@@ -20,6 +20,8 @@ namespace SistemaProyectos.Model
         public string State { get; set; }
         [Column("Progress", TypeName = "float")]
         public float Progress { get; set; }
+        
+        public int? ProjectId { get; set; } 
 
         public Task()
         {
