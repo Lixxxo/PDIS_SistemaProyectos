@@ -11,15 +11,15 @@ namespace SistemaProyectos.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [Column("Hour", TypeName = "datetime")]
-        public DateTime? Hour { get; set; }
+        [Column("Date", TypeName = "Date")]
+        public DateTime? Date { get; set; }
         [Column("Quantity", TypeName = "int")]
         public int Quantity { get; set; }
 
         public TaskMaterial()
         {
-            Hour = DateTime.Now;
-            Quantity = 0;
+            this.Date = DateTime.Today;
+            this.Quantity = 0;
         }
 
     }

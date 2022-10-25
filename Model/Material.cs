@@ -22,6 +22,7 @@ namespace SistemaProyectos.Model
         
         public Material()
         {
+            this.TaskMaterials = new List<TaskMaterial>();
         }
 
         public ICollection<TaskMaterial> TaskMaterials { get; set; }
