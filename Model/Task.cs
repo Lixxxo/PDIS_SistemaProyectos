@@ -39,7 +39,7 @@ namespace SistemaProyectos.Model
             {
                 const int total = 20;
                 var progressBarText = "";
-                progressBarText += this.Progress.ToString("0.00") + "->[";
+                progressBarText += "[";
 
                 var decimalPart = this.Progress * 100 % 100;
 
@@ -61,7 +61,8 @@ namespace SistemaProyectos.Model
                     else progressBarText += "-";
                 }
 
-                progressBarText += "]";
+                progressBarText += "] " + this.Progress.ToString(".00");
+                
                 return progressBarText;
             }
         }
