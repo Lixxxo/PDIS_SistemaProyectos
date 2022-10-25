@@ -90,6 +90,7 @@ namespace SistemaProyectos
             // Querying from database.
             using (var context = new SystemDbContext())
             {
+                MaterialList = context.Materials.ToList();
                 ProjectList = context.Projects.ToList();
                 if (SelectedProject != null)
                 {
@@ -107,8 +108,11 @@ namespace SistemaProyectos
             // Update DataGrids
             DgProjects.ItemsSource = null;
             DgTasks.ItemsSource = null;
+            DgMaterials.ItemsSource = null;
+            
             DgProjects.ItemsSource = ProjectList.ToList();
             DgTasks.ItemsSource = TaskList.ToList();
+            DgMaterials.ItemsSource = MaterialList.ToList();
 
             
         }
