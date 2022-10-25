@@ -1,34 +1,39 @@
 ﻿
-using System.Text.Json;
 using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Input;
 using SistemaProyectos.Database;
 using SistemaProyectos.Model;
-using System.Data;
-using System.Data.Entity.Core.Objects;
-using System.Windows.Input;
+
 
 namespace SistemaProyectos
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         List<Project>? ProjectList { get; set; }
         List<Task>? TaskList { get; set; }
-        Project SelectedProject { get; set; }
-        Task SelectedTask { get; set; }
+        
+        List<Material>? MaterialList { get; set; }
+        
+        List<TaskMaterial>? TaskMaterialList { get; set; }
+        Project? SelectedProject { get; set; }
+        Task? SelectedTask { get; set; }
+        
+        Material? SelectedMaterial { get; set; }
         
         public MainWindow()
         {
             InitializeComponent();
+            Console.Out.Write("XD");
             BtnCreateTask.IsEnabled = false;
             BtnAssignMaterial.IsEnabled = false;
+            StackMaterials.IsEnabled = false;
             PopulateView();
         }
 
@@ -39,11 +44,17 @@ namespace SistemaProyectos
             {
                 context.Projects.Add(p);
                 context.SaveChanges();
+                SelectedProject = p;
             }
-
-            this.SelectedProject = p;
             PopulateView();
-
+            if (ProjectList != null) SelectedProject = ProjectList.Last();
+            // Move Focus
+            var lastProjectIndex = DgProjects.Items.Count - 1;
+            DgProjects.SelectedIndex = lastProjectIndex;
+            
+            DgProjects.UpdateLayout();
+            DgProjects.ScrollIntoView(DgProjects.Items[lastProjectIndex]);
+            SelectedProject = (ProjectList ?? throw new InvalidOperationException()).Last();
         }
         
         private void BtnCreateTask_Click(object sender, RoutedEventArgs e)
@@ -51,81 +62,98 @@ namespace SistemaProyectos
             var t = new Task();
             using (var context = new SystemDbContext())
             {
-                Project p = context.Projects.Find(SelectedProject.Id)!;
+                var selectedId = SelectedProject?.Id ?? 0;
+                Project p = context.Projects.Find(selectedId)!;
+
                 p.Tasks.Add(t);
                 context.Tasks.Add(t);
                 context.SaveChanges();
-                this.SelectedProject = p;
+                SelectedProject = p;
             }
             
             PopulateView();
 
+            if (TaskList != null) SelectedTask = TaskList.Last();
+            // Move Focus
+            var lastTaskIndex = DgTasks.Items.Count - 1;
+            DgTasks.SelectedIndex = lastTaskIndex;
+            
+            DgTasks.UpdateLayout();
+            DgTasks.ScrollIntoView(DgTasks.Items[lastTaskIndex]);
+            SelectedTask = (TaskList ?? throw new InvalidOperationException()).Last();
+
         }
 
         private void PopulateView()
+        
         {   
             // Querying from database.
             using (var context = new SystemDbContext())
             {
-                this.ProjectList = context.Projects.ToList<Project>();
+                ProjectList = context.Projects.ToList();
                 if (SelectedProject != null)
                 {
-                    this.TaskList = this.SelectedProject.Tasks.ToList<Task>();
+                    TaskList = context.Tasks
+                                        .Where(t => t.ProjectId == SelectedProject.Id)
+                                        .ToList();
                 }
                 else
                 {
-                    this.TaskList = new List<Task>();     
+                    TaskList = new List<Task>();
                 }
+            }
+            BtnCreateTask.IsEnabled = ProjectList.Count != 0;
 
-            }
-            
-            if (this.ProjectList.Count != 0)
-            {
-                BtnCreateTask.IsEnabled = true;
-                this.SelectedProject = ProjectList.Last();
-
-                if (this.TaskList.Count != 0)
-                {
-                    this.SelectedTask = TaskList.First();
-                    BtnAssignMaterial.IsEnabled = true;
-                }
-                else
-                {
-                    BtnAssignMaterial.IsEnabled = false;
-                }
-            }
-            else
-            { 
-                BtnCreateTask.IsEnabled = false;
-            }
-            
             // Update DataGrids
             DgProjects.ItemsSource = null;
             DgTasks.ItemsSource = null;
-            
-            DgProjects.ItemsSource = this.ProjectList.ToList();
-            DgTasks.ItemsSource = this.TaskList.ToList();
-            
-            // Move Focus
-            var lastProjectIndex = DgProjects.Items.Count - 1;
-            DgProjects.SelectedIndex = lastProjectIndex;
-            
-            DgProjects.UpdateLayout();
-            DgProjects.ScrollIntoView(DgProjects.Items[lastProjectIndex]);
-            BtnAssignMaterial.Content = this.SelectedProject.Id;
-            /**
-            var firstTaskIndex = 0;
-            DgTasks.SelectedIndex = firstTaskIndex;
-            
-            DgTasks.UpdateLayout();
-            DgTasks.ScrollIntoView(DgTasks.Items[firstTaskIndex]);
-            */
-            BtnAssignMaterial.Content = this.SelectedProject.Id + " " ;
+            DgProjects.ItemsSource = ProjectList.ToList();
+            DgTasks.ItemsSource = TaskList.ToList();
 
-
-
+            
         }
 
+        private void DgProjects_Selected(object sender, RoutedEventArgs routedEventArgs)
+        {
+            DataGridRow? dgr = sender as DataGridRow;
+            dgr!.IsSelected = true;
+            SelectedProject = (Project?)dgr.Item;
+
+            using (var context = new SystemDbContext())
+            {
+                TaskList = context.Tasks
+                    .Where(t => t.ProjectId == SelectedProject!.Id)
+                    .ToList();
+            }
+            DgTasks.ItemsSource = null;
+            DgTasks.ItemsSource = TaskList;
+        }
+
+        private void DgTasks_Selected(object sender, RoutedEventArgs routedEventArgs)
+        {
+            DataGridRow? dgr = sender as DataGridRow;
+            dgr!.IsSelected = true;
+            SelectedTask = (Task?)dgr.Item;
+
+            StackMaterials.IsEnabled = true;
+            BtnAssignMaterial.IsEnabled = true;
+
+        }
+        private void BtnAssignMaterial_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void DgMaterials_Selected(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void DgTaskMaterials_Selected(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+        
     }
     
 }
