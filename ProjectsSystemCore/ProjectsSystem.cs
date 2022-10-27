@@ -52,12 +52,15 @@ public class ProjectsSystem : IProjectsSystem
 
     }
 
-    public bool CreateTask(Task task)
+    public bool CreateTask(Task task, int projectId)
     {
+        
         try
         {
             using (var context = new SystemDbContext())
             {
+                Project p = context.Projects.Find(projectId)!;
+                p.Tasks.Add(task);
                 context.Tasks.Add(task);
                 context.SaveChanges();
             }
@@ -71,6 +74,27 @@ public class ProjectsSystem : IProjectsSystem
         return true;
     }
 
+    public bool ModifyProject(int projectId, Project updatedProject)
+    {
+        try
+        {
+            using (var context = new SystemDbContext())
+            {
+                Project result = context.Projects.First(p => p.Id == projectId);
+                result.Name = updatedProject.Name;
+                result.State = updatedProject.State;
+                context.Entry(result).State = EntityState.Modified;
+                context.SaveChanges();
+            }
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e);
+            return false;
+        }
+
+        return true;
+    }
     public bool ModifyTask(int taskId, Task updatedTask)
     {
         try
@@ -96,8 +120,34 @@ public class ProjectsSystem : IProjectsSystem
         return true;
     }
 
-    public bool AssignMaterial(Material material, TaskMaterial taskMaterial)
+    public bool AssignMaterial(int materialId, int taskId)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using (var context = new SystemDbContext())
+            {
+                Task task = context.Tasks.First(t => t.Id == taskId);
+                Material material = context.Materials.First(m => m.Id == materialId);
+
+                TaskMaterial tm = new TaskMaterial();
+                tm.TaskId = task.Id;
+                tm.MaterialId = material.Id;
+                
+                task.TaskMaterials.Add(tm);
+                material.TaskMaterials.Add(tm);
+
+                context.TaskMaterials.Add(tm);
+
+                context.SaveChanges();
+
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return false;
+        }
+
+        return true;
     }
 }

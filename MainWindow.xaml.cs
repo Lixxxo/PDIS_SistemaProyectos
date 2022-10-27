@@ -4,9 +4,9 @@ using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
-using System.Windows.Input;
 using SistemaProyectos.Database;
 using SistemaProyectos.Model;
+using SistemaProyectos.ProjectsSystemCore;
 
 
 namespace SistemaProyectos
@@ -16,15 +16,14 @@ namespace SistemaProyectos
     /// </summary>
     public partial class MainWindow
     {
+        private ProjectsSystem ProjectSystem;
         List<Project>? ProjectList { get; set; }
         List<Task>? TaskList { get; set; }
-        
         List<Material>? MaterialList { get; set; }
         
         List<TaskMaterial>? TaskMaterialList { get; set; }
         Project? SelectedProject { get; set; }
         Task? SelectedTask { get; set; }
-        
         Material? SelectedMaterial { get; set; }
         
         public MainWindow()
@@ -35,17 +34,15 @@ namespace SistemaProyectos
             BtnAssignMaterial.IsEnabled = false;
             StackMaterials.IsEnabled = false;
             PopulateView();
+            ProjectSystem = new ProjectsSystem();
         }
 
         private void BtnCreateProject_Click(object sender, RoutedEventArgs e)
         {
             var p = new Project();
-            using (var context = new SystemDbContext())
-            {
-                context.Projects.Add(p);
-                context.SaveChanges();
-                SelectedProject = p;
-            }
+            if (!ProjectSystem.CreateProject(p)) return;
+            
+            SelectedProject = p;
             PopulateView();
             if (ProjectList != null) SelectedProject = ProjectList.Last();
             // Move Focus
@@ -56,20 +53,11 @@ namespace SistemaProyectos
             DgProjects.ScrollIntoView(DgProjects.Items[lastProjectIndex]);
             SelectedProject = (ProjectList ?? throw new InvalidOperationException()).Last();
         }
-        
         private void BtnCreateTask_Click(object sender, RoutedEventArgs e)
         {
             var t = new Task();
-            using (var context = new SystemDbContext())
-            {
-                var selectedId = SelectedProject?.Id ?? 0;
-                Project p = context.Projects.Find(selectedId)!;
-
-                p.Tasks.Add(t);
-                context.Tasks.Add(t);
-                context.SaveChanges();
-                SelectedProject = p;
-            }
+            
+            if(SelectedProject != null && !ProjectSystem.CreateTask(t, SelectedProject.Id)) return;
             
             PopulateView();
 
@@ -83,10 +71,21 @@ namespace SistemaProyectos
             SelectedTask = (TaskList ?? throw new InvalidOperationException()).Last();
 
         }
+        private void BtnUpdateProject_Click(object sender, RoutedEventArgs e)
+        {
+            Project newProject = (Project) DgProjects.SelectedItem;
+            if (SelectedProject != null && !ProjectSystem.ModifyProject(SelectedProject.Id, newProject)) return;
+            PopulateView();
+        }
+        private void BtnUpdateTask_Click(object sender, RoutedEventArgs e)
+        {
+            Task newTask = (Task) DgTasks.SelectedItem;
+            if (SelectedTask != null && !ProjectSystem.ModifyTask(SelectedTask.Id, newTask)) return;
+            PopulateView();
+        }
 
         private void PopulateView()
-        
-        {   
+        {
             // Querying from database.
             using (var context = new SystemDbContext())
             {
@@ -102,19 +101,55 @@ namespace SistemaProyectos
                 {
                     TaskList = new List<Task>();
                 }
+
+                RefreshTaskMaterialGrid();
             }
-            BtnCreateTask.IsEnabled = ProjectList.Count != 0;
+            
+            // Buttons enabling
+            RefreshEnabled();
 
             // Update DataGrids
             DgProjects.ItemsSource = null;
             DgTasks.ItemsSource = null;
             DgMaterials.ItemsSource = null;
             
+            
             DgProjects.ItemsSource = ProjectList.ToList();
             DgTasks.ItemsSource = TaskList.ToList();
             DgMaterials.ItemsSource = MaterialList.ToList();
-
             
+
+
+        }
+
+        public void RefreshTaskMaterialGrid()
+        {
+
+            if (SelectedMaterial != null && SelectedTask != null)
+            {
+                using (var context = new SystemDbContext())
+                {
+                    TaskMaterialList = context.TaskMaterials
+                        .Where(tm => tm.MaterialId == SelectedMaterial.Id && tm.TaskId == SelectedTask.Id)
+                        .ToList();    
+                }
+            }
+            else
+            {
+                TaskMaterialList = new List<TaskMaterial>();
+            }
+            DgTaskMaterials.ItemsSource = null;
+            DgTaskMaterials.ItemsSource = TaskMaterialList.ToList();
+        }
+        public void RefreshEnabled()
+        {
+            
+            BtnUpdateProject.IsEnabled = SelectedProject != null;
+            BtnCreateTask.IsEnabled = SelectedProject != null;
+            BtnUpdateTask.IsEnabled = SelectedProject != null && SelectedTask != null;
+            
+            StackMaterials.IsEnabled = SelectedProject != null && SelectedTask != null;
+            BtnAssignMaterial.IsEnabled = SelectedMaterial != null && SelectedTask !=null;
         }
 
         private void DgProjects_Selected(object sender, RoutedEventArgs routedEventArgs)
@@ -131,6 +166,11 @@ namespace SistemaProyectos
             }
             DgTasks.ItemsSource = null;
             DgTasks.ItemsSource = TaskList;
+
+            SelectedTask = null;
+            SelectedMaterial = null;
+            
+            RefreshEnabled();
         }
 
         private void DgTasks_Selected(object sender, RoutedEventArgs routedEventArgs)
@@ -138,24 +178,25 @@ namespace SistemaProyectos
             DataGridRow? dgr = sender as DataGridRow;
             dgr!.IsSelected = true;
             SelectedTask = (Task?)dgr.Item;
-
-            StackMaterials.IsEnabled = true;
-            BtnAssignMaterial.IsEnabled = true;
+            
+            RefreshEnabled();
+            RefreshTaskMaterialGrid();
 
         }
         private void BtnAssignMaterial_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (SelectedTask != null && SelectedMaterial != null)
+                ProjectSystem.AssignMaterial(SelectedMaterial.Id, SelectedTask.Id);
+            PopulateView();
         }
 
         private void DgMaterials_Selected(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
-        }
-
-        private void DgTaskMaterials_Selected(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
+            DataGridRow? dgr = sender as DataGridRow;
+            dgr!.IsSelected = true;
+            SelectedMaterial = (Material?)dgr.Item;
+            RefreshEnabled();
+            RefreshTaskMaterialGrid();
         }
         
     }

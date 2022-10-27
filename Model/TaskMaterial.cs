@@ -16,9 +16,14 @@ namespace SistemaProyectos.Model
         [Column("Quantity", TypeName = "int")]
         public int Quantity { get; set; }
 
+        public int TaskId { get; set; }
+        public int MaterialId { get; set; }
+
+
         public TaskMaterial()
         {
             this.Date = DateTime.Today;
+            
             this.Quantity = 0;
         }
 

@@ -15,9 +15,18 @@ public interface IProjectsSystem
     /// Create a Task (task) into the database.
     /// </summary>
     /// <param name="task">The new Task (task).</param>
+    /// /// <param name="projectId">The project that is asociated with the task.</param>
     /// <returns></returns>
-    bool CreateTask(Task task);
+    bool CreateTask(Task task, int projectId);
 
+    /// <summary>
+    /// Modify an existent Task (task) from the database.
+    /// </summary>
+    /// <param name="projectId">The id of actual project.</param>
+    /// <param name="updatedProject">The new Project with updated values.</param>
+    /// <returns>True if success.</returns>
+    bool ModifyProject(int projectId, Project updatedProject);
+    
     /// <summary>
     /// Modify an existent Task (task) from the database.
     /// </summary>
@@ -29,8 +38,8 @@ public interface IProjectsSystem
     /// <summary>
     /// Assign Task material to the given material.
     /// </summary>
-    /// <param name="material">The focus material.</param>
-    /// <param name="taskMaterial">The Task material that is going the assign.</param>
+    /// <param name="materialId">The id of the Material that is going the be assigned.</param>
+    /// <param name="taskId">The id of the Task that is going the be assigned.</param>
     /// <returns>True if success.</returns>
-    bool AssignMaterial(Material material, TaskMaterial taskMaterial);
+    bool AssignMaterial(int materialId, int taskId);
 }

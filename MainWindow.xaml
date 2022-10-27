@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:SistemaProyectos"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        Title="MainWindow" Height="500" Width="1600"
+        Title="MainWindow" Height="800" Width="1500"
+        Language="es"
     xmlns:System="clr-namespace:System;assembly=System.Runtime">
     <Window.Resources>
         <System:String x:Key="lblProject">Proyectos</System:String>
@@ -14,8 +15,8 @@
         <System:String x:Key="lblMaterial">Materiales</System:String>
         <System:String x:Key="lblTaskMaterial">Materiales ocupados</System:String>
         
-        <System:String x:Key="btnCreateProject">Crear Proyecto</System:String>
-        <System:String x:Key="btnCreateTask">Crear Tarea</System:String>
+        <System:String x:Key="Update">Actualizar</System:String>
+        <System:String x:Key="Create">Crear</System:String>
         <System:String x:Key="btnAssignMaterial">Asignar Material</System:String>
         <x:Array x:Key="statuses" Type="{x:Type System:String}">
             <System:String>Inactivo</System:String>
@@ -27,9 +28,8 @@
 
     <Grid Margin="10" >
         <Grid.ColumnDefinitions >
-            <ColumnDefinition Width="100*"/>
             <ColumnDefinition Width="50*"/>
-            <ColumnDefinition Width="130*"/>
+            <ColumnDefinition Width="30*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column ="0" x:Name="StackDataGrids" VerticalAlignment="Top" 
                     Margin="10,10,10,10" Background="LightBlue"
@@ -40,38 +40,30 @@
 
             </Label>
             
-            <DataGrid x:Name="DgProjects" Height="135" Margin="5,5,5,5"
+            <DataGrid x:Name="DgProjects" Height="270" Margin="5,5,5,5"
                       CanUserAddRows="False"
                       AutoGenerateColumns="False"
+                      SelectionMode="Single"
                                             >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Id" Binding="{Binding Path=Id}"
-                                        Width="10"
+                                        Width="50"
                                         CanUserResize="False"
                                         CanUserReorder="False"
                                         IsReadOnly="True"
                                         />
                     <DataGridTextColumn Header="Nombre" Binding="{Binding Path=Name}"
-                                        Width="410"
+                                        Width="650"
                                         CanUserResize="False"
                                         CanUserReorder="False"
                                         />
-                    <DataGridTemplateColumn Header="Estado"
-                                            Width="65"
-                                            CanUserResize="False"
-                                            CanUserReorder="False"
-                                            >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=State}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <ComboBox ItemsSource="{Binding Source={StaticResource statuses}}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                    </DataGridTemplateColumn>
+                    <DataGridComboBoxColumn Header="Estado"  
+                                            Width="100"
+                                            SelectedItemBinding="{Binding State, UpdateSourceTrigger=PropertyChanged}" 
+                                            ItemsSource="{Binding  Source={StaticResource statuses}}"/>
+                    
+
+
                 </DataGrid.Columns>
                 
                 <DataGrid.RowStyle>
@@ -86,45 +78,50 @@
                 </DataGrid.RowStyle>
                 
             </DataGrid>
-            
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="BtnCreateProject" FontFamily="Consolas" FontSize="12"
+                        Content="{DynamicResource Create}" 
+                        Margin="5" Width="100" HorizontalAlignment="Right"
+                        Click="BtnCreateProject_Click"/> 
+                <Button x:Name="BtnUpdateProject" FontFamily="Consolas" FontSize="12"
+                        Content="{DynamicResource Update}"
+                        Margin="5" Width="100" HorizontalAlignment="Left"
+                        Click="BtnUpdateProject_Click"/>
+            </StackPanel>
+
+
+            <Separator></Separator>
             <Label x:Name="LblTasks" FontFamily="Consolas" FontSize="36"
                    Content="{DynamicResource lblTask}">
             </Label>
-            
-            <DataGrid x:Name="DgTasks" Height="135" Margin="5,5,5,5"
+            <DataGrid x:Name="DgTasks" Height="270" Margin="5,5,5,5"
                       CanUserAddRows="False"
-                      AutoGenerateColumns="False">
+                      AutoGenerateColumns="False"
+                      SelectionMode="Single"
+                      >
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Id" Binding="{Binding Path=Id}"
-                                        Width="10"
+                    <DataGridTextColumn Header="Código" Binding="{Binding Path=Id}"
+                                        Width="50"
                                         CanUserResize="False"
                                         CanUserReorder="False"
                                         IsReadOnly="True"
                                         />
                     <DataGridTextColumn Header="Nombre" Binding="{Binding Path=Name}"
-                                        Width="285"
+                                        Width="500"
                                         CanUserResize="False"
                                         CanUserReorder="False"/>
-                    <DataGridTemplateColumn Header="Estado"
-                                            Width="65"
-                                            CanUserResize="False"
-                                            CanUserReorder="False">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=State}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <ComboBox ItemsSource="{Binding Source={StaticResource statuses}}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                    </DataGridTemplateColumn>
+                    
+                    <DataGridComboBoxColumn Header="Estado"
+                                            Width="100"
+                                            SelectedItemBinding="{Binding State, UpdateSourceTrigger=PropertyChanged}" 
+                                            ItemsSource="{Binding  Source={StaticResource statuses}}"/>
+
                     <DataGridTextColumn Header="Avance" Binding="{Binding Path=ProgressString}"
-                                        Width="130"
+                                        Width="150"
                                         CanUserResize="False"
                                         CanUserReorder="False"
                                         IsReadOnly="True"/>
+                    
                 </DataGrid.Columns>
                 
                 
@@ -139,28 +136,21 @@
                     </Style>
                 </DataGrid.RowStyle>
             </DataGrid>
-
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="BtnCreateTask" FontFamily="Consolas" FontSize="12"
+                        Content="{DynamicResource Create}" 
+                        Margin="5" Width="100" HorizontalAlignment="Right"
+                        Click="BtnCreateTask_Click"/> 
+                <Button x:Name="BtnUpdateTask" FontFamily="Consolas" FontSize="12"
+                        Content="{DynamicResource Update}"
+                        Margin="5" Width="100" HorizontalAlignment="Left"
+                        Click="BtnUpdateTask_Click"/>
+            </StackPanel>
+           
         </StackPanel>
 
-        <StackPanel Grid.Column="1" x:Name="StackButtons" VerticalAlignment="Top" 
-                    Margin="10,10,10,10" Background="LightSteelBlue"
-                    >
-            <Button x:Name="BtnCreateProject"
-                    Content="{DynamicResource btnCreateProject}" 
-                    Margin="10,10,10,10"
-                    Height="90" FontFamily="Consolas" FontSize="18" Click="BtnCreateProject_Click"/>
-            <Button x:Name="BtnCreateTask"
-                    Content="{DynamicResource btnCreateTask}" 
-                    Margin="10,75,10,10"
-                    Height="90" FontFamily="Consolas" FontSize="18" Click="BtnCreateTask_Click"/>
-            <Button x:Name="BtnAssignMaterial"
-                    Content="{DynamicResource btnAssignMaterial}"
-                    Margin="10,10,10,10"
-                    Height="90" FontFamily="Consolas" FontSize="16" Click="BtnAssignMaterial_Click"/>
-        </StackPanel>
-
-        <StackPanel Grid.Column="2" x:Name="StackMaterials" VerticalAlignment="Top" 
-                    Margin="10,10,10,10" Background="AliceBlue"
+        <StackPanel Grid.Column="1" x:Name="StackMaterials" VerticalAlignment="Top" 
+                    Margin="10,10,10,10" Background="LightBlue"
                     >
 
             <Label x:Name="LblMaterial" FontFamily="Consolas" FontSize="36"
@@ -168,10 +158,11 @@
 
             </Label>
             
-            <DataGrid x:Name="DgMaterials" Height="135" Margin="5,5,5,5"
+            <DataGrid x:Name="DgMaterials" Height="250" Margin="5,5,5,5"
                       CanUserAddRows="False"
                       AutoGenerateColumns="False"
                       IsReadOnly="True"
+                      SelectionMode="Single"
                                             >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Código" Binding="{Binding Path=Id}"
@@ -181,15 +172,20 @@
                                         
                                         />
                     <DataGridTextColumn Header="Nombre" Binding="{Binding Path=Name}"
-                                        Width="420"
+                                        Width="220"
                                         CanUserResize="False"
                                         CanUserReorder="False"
                                         />
                     <DataGridTextColumn Header="Precio" Binding="{Binding Path=Price}"
-                                        Width="200"
+                                        Width="100"
                                         CanUserResize="False"
                                         CanUserReorder="False"
-                    />
+                                        />
+                    <DataGridTextColumn Header="Cantidad" Binding="{Binding Path=Quantity}"
+                                        Width="100"
+                                        CanUserResize="False"
+                                        CanUserReorder="False"
+                                        />
                 </DataGrid.Columns>
                 
                 <DataGrid.RowStyle>
@@ -202,30 +198,33 @@
                         </Style.Triggers>
                     </Style>
                 </DataGrid.RowStyle>
-                
             </DataGrid>
-            
+            <Separator></Separator>
             <Label x:Name="LblTaskMaterial" FontFamily="Consolas" FontSize="36"
                    Content="{DynamicResource lblTaskMaterial}">
             </Label>
             
-            <DataGrid x:Name="DgTaskMaterials" Height="135" Margin="5,5,5,5"
+            <DataGrid x:Name="DgTaskMaterials" Height="250" Margin="5,5,5,5"
                       CanUserAddRows="False"
                       AutoGenerateColumns="False"
-                      IsReadOnly="True">
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      ItemStringFormat="MM/dd/yyy">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Id" Binding="{Binding Path=Id}"
-                                        Width="10"
+                                        Width="60"
                                         CanUserResize="False"
                                         CanUserReorder="False"
                                         />
-                    <DataGridTextColumn Header="Fecha" Binding="{Binding Path=Date}"
-                                        Width="460
-                                        "
+                    <DataGridTextColumn Header="Fecha" Binding="{Binding Path=Date,
+                                                                StringFormat='dddd, dd/MMMM/yyyy'}"
+                                        Width="320"
                                         CanUserResize="False"
-                                        CanUserReorder="False"/>
+                                        CanUserReorder="False"
+                                        
+                                        />
                     <DataGridTextColumn Header="Cantidad" Binding="{Binding Path=Quantity}"
-                                        Width="200"
+                                        Width="100"
                                         CanUserResize="False"
                                         CanUserReorder="False"/>
                     
@@ -234,7 +233,6 @@
                 
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
-                        <EventSetter Event="Selected" Handler="DgTaskMaterials_Selected" />
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="Blue" />
@@ -243,6 +241,11 @@
                     </Style>
                 </DataGrid.RowStyle>
             </DataGrid>
+            
+            <Button x:Name="BtnAssignMaterial"
+                    Content="{DynamicResource btnAssignMaterial}"
+                    Margin="13"
+                    Width="200" Height="70" FontFamily="Consolas" FontSize="16" Click="BtnAssignMaterial_Click"/>
 
         </StackPanel>
         
