@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SistemaProyectos"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        Title="MainWindow" Height="800" Width="1500"
+        Title="Sistema de Administración de Proyectos" Height="800" Width="1500"
         Language="es"
     xmlns:System="clr-namespace:System;assembly=System.Runtime">
     <Window.Resources>
