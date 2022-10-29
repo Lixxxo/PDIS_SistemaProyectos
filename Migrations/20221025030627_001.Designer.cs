@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SistemaProyectos.Database;
 
@@ -11,9 +12,10 @@ using SistemaProyectos.Database;
 namespace SistemaProyectos.Migrations
 {
     [DbContext(typeof(SystemDbContext))]
-    partial class SystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221025030627_001")]
+    partial class _001
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,18 +116,18 @@ namespace SistemaProyectos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime?>("Date")
-                        .HasColumnType("Date")
-                        .HasColumnName("Date");
+                    b.Property<DateTime?>("Hour")
+                        .HasColumnType("datetime")
+                        .HasColumnName("Hour");
 
-                    b.Property<int>("MaterialId")
+                    b.Property<int?>("MaterialId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int")
                         .HasColumnName("Quantity");
 
-                    b.Property<int>("TaskId")
+                    b.Property<int?>("TaskId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -139,26 +141,20 @@ namespace SistemaProyectos.Migrations
 
             modelBuilder.Entity("SistemaProyectos.Model.Task", b =>
                 {
-                    b.HasOne("SistemaProyectos.Model.Project", "Project")
+                    b.HasOne("SistemaProyectos.Model.Project", null)
                         .WithMany("Tasks")
                         .HasForeignKey("ProjectId");
-
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("SistemaProyectos.Model.TaskMaterial", b =>
                 {
                     b.HasOne("SistemaProyectos.Model.Material", null)
                         .WithMany("TaskMaterials")
-                        .HasForeignKey("MaterialId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MaterialId");
 
                     b.HasOne("SistemaProyectos.Model.Task", null)
                         .WithMany("TaskMaterials")
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TaskId");
                 });
 
             modelBuilder.Entity("SistemaProyectos.Model.Material", b =>
