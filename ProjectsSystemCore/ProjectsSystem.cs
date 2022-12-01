@@ -23,6 +23,8 @@ public class ProjectsSystem : IProjectsSystem
     /// </summary>
     private List<Project> _projects;
 
+    private Rabbit.Rabbit _rabbit;
+
     /// <summary>
     /// Constructor of the system.
     /// </summary>
@@ -30,6 +32,7 @@ public class ProjectsSystem : IProjectsSystem
     {
         _tasks = new List<Task>();
         _projects = new List<Project>();
+        _rabbit = new Rabbit.Rabbit();
     }
 
     public bool CreateProject(Project project)
